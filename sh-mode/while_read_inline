@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: while_read_inline
+# key: -wri
+# --
+while read line arg1 arg2
+do
+    echo "Line: ${line} - arg1=${arg1} arg2=${arg2}"
+done <<-"_EOF"
+l1 v1 v2
+l2 v1 v2
+_EOF

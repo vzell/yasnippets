@@ -1,0 +1,169 @@
+# key: #g
+# name: git-fork
+# --
+* GitHub: Fork - ${1:git-user} / ${2:git-project-name}
+** Fork the repository
+
+https://github.com/$1/$2.git
+
+Press the *Fork* button
+
+** Optionally rename the forked project
+
+ - On GitHub, navigate to the main page of the repository
+
+ - Under your repository name, click *Settings*
+
+ - Under the Repository Name heading, type the new name of your repository
+
+#+begin_example
+${3:$2}
+#+end_example
+
+ - Click Rename
+
+** Clone your forked repository
+
+#+begin_src bash
+cd ${7:/misc/git}
+#+end_src
+$0
+#+begin_src bash
+git clone ${4:$$(yas-choose-value '("git@github.com:" "https://github.com/"))}${5:vzell}/$3.git $3
+#+end_src
+
+** Change to the newly created directory
+
+#+begin_src bash
+cd $7/$3
+#+end_src
+
+** Add the *remote* upstream repository so you can fetch any changes to the original forked repository
+
+#+begin_src bash
+git remote add upstream $4$1/$2.git
+#+end_src
+
+** Get the latest files from the *upstream* repository
+
+#+begin_src bash
+git fetch upstream
+#+end_src
+
+** Checkout the latest source code from the current *master* branch into your own branch
+
+#+begin_src bash
+git checkout -b ${6:branch-name} upstream/master
+#+end_src
+
+** Contribute new code or make changes to existing files
+
+#+begin_src bash
+$EDIT .
+#+end_src
+
+** Use the =git add= command to add new or changed file contents to the staging area
+
+#+begin_src bash
+git add .
+#+end_src
+
+** Use the git status command to view the status of the files in the directory and in the staging area and ensure that all modified files are properly staged
+
+#+begin_src bash
+git status
+#+end_src
+
+** Commit your changes to your local topic branch
+
+#+begin_src bash
+git commit -m 'First commit'
+#+end_src
+
+** Update your branch with any changes made upstream since you started
+*** Fetch the latest changes from upstream
+
+#+begin_src bash
+git fetch upstream
+#+end_src
+
+*** Apply those changes to your branch
+
+#+begin_src bash
+git rebase upstream
+#+end_src
+
+*** If anyone has commited changes to files that you have also changed, you may see conflicts
+
+Resolve the conflicted files, add them using =git add=, and continue the rebase
+
+#+begin_src bash
+git add git rebase --continue
+#+end_src
+
+*** If there were conflicts, it is a good idea to test your changes again to make they still work
+*** Push your local topic branch to your GitHub forked repository
+
+This will create a branch on your Git fork repository with the same name as your local topic branch name.
+You can verify your forked remote repository name using the command =git remote -v=.
+
+#+begin_src bash
+git remote -v
+#+end_src
+
+#+begin_src bash
+git push origin HEAD
+#+end_src
+
+*** Browse to the branch on your forked Git repository and open a Pull Request
+
+Give it a clear title and description.
+
+#+begin_src bash
+cygstart https://github.com/$5/$3/pull/new/$6
+#+end_src
+
+** Integrate Branches - Merging
+**** Branches 
+
+#+begin_src bash
+git branch -va
+#+end_src
+
+**** Preparing to Merge
+
+#+begin_src bash
+git fetch
+#+end_src
+
+#+begin_src bash
+git branch -va
+#+end_src
+
+#+begin_src bash
+git checkout master
+#+end_src
+
+#+begin_src bash
+git pull
+#+end_src
+
+**** Starting the Merge
+
+#+begin_src bash
+git merge $6
+#+end_src
+
+#+begin_src bash
+git branch -va
+#+end_src
+
+**** To update your fork on GitHub, you must push your changes
+
+Syncing your fork only updates your local copy of the repository. To update your
+fork on GitHub, you must push your changes.
+
+#+begin_src bash
+git push
+#+end_src
+
