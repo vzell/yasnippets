@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: supowershell
+# key: -sup
+# --
+#+begin_src bash
+supowershell -NoExit -Command "$0"
+#+end_src
